@@ -28,6 +28,6 @@ make comparison_modified.png
 # Requirements
 
 * [Brian2](https://briansimulator.org) >= 2.4.2
-* [Arbor](https://github.com/arbor-sim/arbor) >= 0.5
+* [Arbor](https://github.com/arbor-sim/arbor) >= 0.5.2
 * [LIF mechanism for Arbor](https://github.com/arbor-sim/arbor/pull/1517)
 * [matplotlib](https://matplotlib.org) >= 3.4.1

@@ -73,7 +73,7 @@ class SingleRecipe(arbor.recipe):
         lif.set("g_leak", neuron_config["g_leak"])
         lif.set("tau_refrac", neuron_config["tau_refrac"])
         decor.paint('(all)', lif)
-        decor.place('"center"', arbor.spike_detector(v_thresh))
+        decor.place('"center"', arbor.spike_detector(v_thresh), "spike_detector")
 
         # plastic excitatory synapse
         syn_config_stdp = self.config["synapses"]["cond_exp_stdp"]
@@ -85,14 +85,14 @@ class SingleRecipe(arbor.recipe):
         mech_expsyn_exc.set('Apre', syn_config_stdp["A_pre"])
         mech_expsyn_exc.set('Apost', syn_config_stdp["A_post"])
         mech_expsyn_exc.set('max_weight', 50)
-        decor.place('"center"', mech_expsyn_exc)
+        decor.place('"center"', mech_expsyn_exc, "expsyn_stdp_exc")
 
         # inhibitory synapse
         syn_config = self.config["synapses"]["cond_exp"]
         mech_expsyn_inh = arbor.mechanism('expsyn')
         mech_expsyn_inh.set('tau', syn_config["tau"])
         mech_expsyn_inh.set('e', syn_config["reversal_potential"])
-        decor.place('"center"', mech_expsyn_inh)
+        decor.place('"center"', mech_expsyn_inh, "expsyn_inh")
 
         return arbor.cable_cell(tree, labels, decor)
 
@@ -107,11 +107,11 @@ class SingleRecipe(arbor.recipe):
         stimulus_times_inh = syn_config["stimulus_times"]
 
         spike_exc = arbor.event_generator(
-            0,
+            "expsyn_stdp_exc",
             syn_config_stdp["weight"],
             arbor.explicit_schedule(stimulus_times_exc))
         spike_inh = arbor.event_generator(
-            1, syn_config["weight"], arbor.explicit_schedule(stimulus_times_inh))
+            "expsyn_inh", syn_config["weight"], arbor.explicit_schedule(stimulus_times_inh))
 
         return [spike_exc, spike_inh]
 
