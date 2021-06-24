@@ -21,7 +21,8 @@ class SingleRecipe(arbor.recipe):
         arbor.recipe.__init__(self)
 
         self.the_props = arbor.neuron_cable_properties()
-        self.the_cat = arbor.default_catalogue()
+        self.the_cat = arbor.load_catalogue("./custom-catalogue.so")
+        self.the_cat.extend(arbor.default_catalogue(), "")
         self.the_props.register(self.the_cat)
 
         self.config = config

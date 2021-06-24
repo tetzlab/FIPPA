@@ -8,6 +8,9 @@ The implementation is validated against the Brian2 simulator.
 
 # Howto
 
+Install Arbor from source and make sure `build-catalogue` from the Arbor scripts directory
+is in `PATH` or modify the `Makefile` accordingly.
+
 Adapt `run_arbor.sh` and `run_brian2.sh` to your environment.
 
 ```shell

@@ -1,7 +1,12 @@
 .DEFAULT_GOAL := comparison_brian2_arbor.png
 
+BUILD_CATALOGUE_SCRIPT := build-catalogue
+
+custom-catalogue.so: $(wildcard mechanisms/*.mod)
+	$(BUILD_CATALOGUE_SCRIPT) custom mechanisms
+
 .PRECIOUS: arbor_traces_%.dat arbor_spikes_%.dat
-arbor_traces_%.dat arbor_spikes_%.dat: config_%.json arbor_lif_stdp.py
+arbor_traces_%.dat arbor_spikes_%.dat: config_%.json arbor_lif_stdp.py custom-catalogue.so
 	./run_arbor.sh $*
 
 .PRECIOUS: brian2_traces_%.dat brian2_spikes_%.dat
@@ -13,7 +18,7 @@ comparison_%.png: arbor_traces_%.dat arbor_spikes_%.dat brian2_traces_%.dat bria
 
 .PHONY: clean
 clean:
-	rm -f *png *dat
+	rm -f *png *dat *so
 
 .PHONY: help
 help:
