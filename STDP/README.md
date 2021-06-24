@@ -1,5 +1,7 @@
 # Event-driven plasticity
 
+[![Event-driven plasticity](https://github.com/tetzlab/FIPPA/actions/workflows/STDP.yml/badge.svg)](https://github.com/tetzlab/FIPPA/actions/workflows/STDP.yml)
+
 With input from FIPPA, Arbor was extended with the possibility for event-driven plasticity.
 
 A synapse with spike-timing dependent plasticity (STDP) has been added to Arbor.
