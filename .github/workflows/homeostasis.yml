@@ -1,0 +1,52 @@
+name: Spike-based homeostasis
+
+on: [push]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: [3.8]
+
+    steps:
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v2
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Checkout source
+        uses: actions/checkout@v2
+
+      - name: Checkout Arbor source
+        uses: actions/checkout@v2
+        with:
+          repository: arbor-sim/arbor
+          ref: v0.5.2
+          path: arbor
+          submodules: true
+
+      - name: Install
+        run: |
+          python3 -mvenv venv
+          source venv/bin/activate
+          pip install -r spike_based_homeostasis/requirements.txt
+          cd arbor
+          mkdir build
+          cd build
+          cmake -DARB_WITH_PYTHON=ON -DARB_USE_BUNDLED_LIBS=ON -DCMAKE_INSTALL_PREFIX=$(readlink -f ../../venv) ..
+          make install
+
+      - name: Run
+        run: |
+          source venv/bin/activate
+          export PATH=$(readlink -f arbor/scripts/):$PATH
+          export CMAKE_PREFIX_PATH=$(readlink -f venv)
+          cd spike_based_homeostasis
+          make
+
+      - uses: actions/upload-artifact@v2
+        with:
+          name: Demonstration of spike-based homeostasis
+          path: spike_based_homeostasis/homeostasis.svg

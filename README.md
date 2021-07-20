@@ -19,3 +19,4 @@ long-term memories and an overall increase in storage capacity.
 # Outputs
 
 * [Event-driven plasticity](STDP)
+* [Spike-based homeostasis](spike_based_homeostasis)
