@@ -65,7 +65,7 @@ class SingleRecipe(arbor.recipe):
 
         # cell mechanism
         decor = arbor.decor()
-        decor.set_property(Vm=neuron_config["e_leak"], cm=0.01)
+        decor.set_property(Vm=neuron_config["e_leak"], cm=neuron_config["specific_capacitance"])
         lif = arbor.mechanism(neuron_config["type"])
         v_thresh = neuron_config["v_thresh"]
         lif.set("e_thresh", v_thresh)
