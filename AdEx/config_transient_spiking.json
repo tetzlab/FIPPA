@@ -1,0 +1,26 @@
+{
+	"pattern" : "transient spiking",
+	"simulation" : {
+		"dt" : 0.01,
+		"runtime" : 600
+	},
+	"neuron" : {
+		"type" : "adex",
+		"capacitance" : 100e-12,
+		"g_leak" : 10e-9,
+		"e_leak" : -65.0,
+		"v_t" : -50.0,
+		"delta_t" : 2.0,
+		"a" : 10e-9,
+		"tau_w" : 100,
+		"b" : 100e-12,
+		"v_reset" : -47.0,
+		"v_thresh" : 0,
+		"g_reset" : 1,
+		"tau_refrac" : 0.1,
+		"radius" : 1
+	},
+	"stimulus" : {
+		"amplitude" : 180e-12
+	}
+}

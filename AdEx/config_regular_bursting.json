@@ -1,0 +1,26 @@
+{
+	"pattern" : "regular bursting",
+	"simulation" : {
+		"dt" : 0.01,
+		"runtime" : 600
+	},
+	"neuron" : {
+		"type" : "adex",
+		"capacitance" : 200e-12,
+		"g_leak" : 10e-9,
+		"e_leak" : -58.0,
+		"v_t" : -50.0,
+		"delta_t" : 2.0,
+		"a" : 2e-9,
+		"tau_w" : 120,
+		"b" : 100e-12,
+		"v_reset" : -46.0,
+		"v_thresh" : 0,
+		"g_reset" : 1,
+		"tau_refrac" : 0.1,
+		"radius" : 1
+	},
+	"stimulus" : {
+		"amplitude" : 210e-12
+	}
+}

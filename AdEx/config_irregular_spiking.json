@@ -1,0 +1,26 @@
+{
+	"pattern" : "irregular spiking",
+	"simulation" : {
+		"dt" : 0.01,
+		"runtime" : 600
+	},
+	"neuron" : {
+		"type" : "adex",
+		"capacitance" : 100e-12,
+		"g_leak" : 12e-9,
+		"e_leak" : -60.0,
+		"v_t" : -50.0,
+		"delta_t" : 2.0,
+		"a" : -11e-9,
+		"tau_w" : 130,
+		"b" : 30e-12,
+		"v_reset" : -48.0,
+		"v_thresh" : 0,
+		"g_reset" : 1,
+		"tau_refrac" : 0.1,
+		"radius" : 1
+	},
+	"stimulus" : {
+		"amplitude" : 160e-12
+	}
+}

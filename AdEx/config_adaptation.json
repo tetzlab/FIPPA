@@ -1,0 +1,27 @@
+{
+	"pattern" : "adaptation",
+	"simulation" : {
+		"dt" : 0.01,
+		"runtime" : 600
+	},
+	"neuron" : {
+		"type" : "adex",
+		"capacitance" : 200e-12,
+		"g_leak" : 12e-9,
+		"e_leak" : -70.0,
+		"v_t" : -50,
+		"delta_t" : 2,
+		"a" : 2e-9,
+		"tau_w" : 300,
+		"b" : 60e-12,
+		"v_reset" : -58.0,
+		"v_thresh" : 0,
+		"g_reset" : 1,
+		"tau_refrac" : 0.1,
+		"radius" : 1
+	},
+	"stimulus" : {
+		"amplitude" : 500e-12
+	}
+}
+
