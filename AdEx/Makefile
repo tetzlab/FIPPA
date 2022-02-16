@@ -19,4 +19,4 @@ clean:
 
 .PHONY: help
 help:
-	@echo "For configuration variant config_brian2_arbor.json do: make comparison_brian2_arbor.png"
+	@echo "For configuration variant config_tonic_spiking.json do: make tonic_spiking.png"
