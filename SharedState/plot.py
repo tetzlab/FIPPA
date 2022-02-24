@@ -21,7 +21,7 @@ def main():
 
     axes[1].set_xlabel("t [ms]")
 
-    fig.savefig(f"plot.pdf")
+    fig.savefig(f"plot.png")
 
 if __name__ == '__main__':
 
