@@ -16,7 +16,7 @@ STATE {
 }
 
 INITIAL {
-   pi = 0
+   pi = 1000
 }
 
 DERIVATIVE state {
@@ -29,5 +29,6 @@ PARAMETER {
 }
 
 BREAKPOINT {
+    SOLVE state METHOD cnexp
 }
 
