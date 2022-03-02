@@ -1,7 +1,7 @@
 BUILD_CATALOGUE_SCRIPT := spack build-env arbor arbor-build-catalogue
 
 .PHONY : all
-all: tonic_spiking.png adaptation.png initial_burst.png regular_bursting.png delayed_accelerating.png delayed_regular_bursting.png transient_spiking.png irregular_spiking.png
+all: plateau.png
 
 custom-catalogue.so: $(wildcard mechanisms/*.mod)
 	$(BUILD_CATALOGUE_SCRIPT) custom mechanisms
@@ -19,4 +19,4 @@ clean:
 
 .PHONY: help
 help:
-	@echo "For configuration variant config_tonic_spiking.json do: make tonic_spiking.png"
+	@echo "For configuration variant config_brian2_arbor.json do: make comparison_brian2_arbor.png"
