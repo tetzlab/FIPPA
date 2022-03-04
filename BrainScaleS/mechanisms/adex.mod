@@ -26,7 +26,6 @@ INITIAL {
     refractory_counter = tau_refrac + 1 : start not refractory
 	holdoff_counter = holdoff + 1 : start not in holdoff
     w = 0
-	g = g_leak
 	adex_current = 0
 }
 
