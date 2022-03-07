@@ -1,0 +1,29 @@
+{
+	"pattern" : "plateau",
+	"simulation" : {
+		"dt" : 0.1,
+		"runtime" : 100
+	},
+	"neuron" : {
+		"type" : "adex",
+		"capacitance" : 200e-12,
+		"g_leak" : 12e-9,
+		"e_leak" : -70,
+		"v_t" : 10000000,
+		"delta_t" : 1,
+		"a" : 0,
+		"tau_w" : 300,
+		"b" : 0,
+		"v_reset" : -40,
+		"v_thresh" : -50,
+		"g_reset" : 100000000,
+		"tau_refrac" : 25,
+		"holdoff" : 100,
+		"radius" : 1
+	},
+	"stimulus" : {
+		"amplitude" : 1e-9,
+		"duration" : 10
+	}
+}
+
