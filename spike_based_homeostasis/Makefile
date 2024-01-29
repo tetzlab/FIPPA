@@ -1,6 +1,6 @@
 .DEFAULT_GOAL := homeostasis.svg
 
-BUILD_CATALOGUE_SCRIPT := build-catalogue
+BUILD_CATALOGUE_SCRIPT := arbor-build-catalogue
 CONFIG := config.json
 
 homeostasis-catalogue.so: $(wildcard mechanisms/*.mod)

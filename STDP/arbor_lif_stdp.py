@@ -23,7 +23,7 @@ class SingleRecipe(arbor.recipe):
         self.the_props = arbor.neuron_cable_properties()
         self.the_cat = arbor.load_catalogue("./custom-catalogue.so")
         self.the_cat.extend(arbor.default_catalogue(), "")
-        self.the_props.register(self.the_cat)
+        self.the_props.catalogue = self.the_cat
 
         self.config = config
 
@@ -73,8 +73,8 @@ class SingleRecipe(arbor.recipe):
         lif.set("g_reset", neuron_config["g_reset"])
         lif.set("g_leak", neuron_config["g_leak"])
         lif.set("tau_refrac", neuron_config["tau_refrac"])
-        decor.paint('(all)', lif)
-        decor.place('"center"', arbor.spike_detector(v_thresh), "spike_detector")
+        decor.paint('(all)', arbor.density(lif))
+        decor.place('"center"', arbor.threshold_detector(v_thresh), "spike_detector")
 
         # plastic excitatory synapse
         syn_config_stdp = self.config["synapses"]["cond_exp_stdp"]
@@ -86,16 +86,16 @@ class SingleRecipe(arbor.recipe):
         mech_expsyn_exc.set('Apre', syn_config_stdp["A_pre"])
         mech_expsyn_exc.set('Apost', syn_config_stdp["A_post"])
         mech_expsyn_exc.set('max_weight', 50)
-        decor.place('"center"', mech_expsyn_exc, "expsyn_stdp_exc")
+        decor.place('"center"', arbor.synapse(mech_expsyn_exc), "expsyn_stdp_exc")
 
         # inhibitory synapse
         syn_config = self.config["synapses"]["cond_exp"]
         mech_expsyn_inh = arbor.mechanism('expsyn')
         mech_expsyn_inh.set('tau', syn_config["tau"])
         mech_expsyn_inh.set('e', syn_config["reversal_potential"])
-        decor.place('"center"', mech_expsyn_inh, "expsyn_inh")
+        decor.place('"center"', arbor.synapse(mech_expsyn_inh), "expsyn_inh")
 
-        return arbor.cable_cell(tree, labels, decor)
+        return arbor.cable_cell(tree, decor, labels)
 
     def event_generators(self, gid):
         """Return event generators on gid."""
@@ -141,7 +141,7 @@ def main(variant):
 
     context = arbor.context()
     domains = arbor.partition_load_balance(recipe, context)
-    sim = arbor.simulation(recipe, domains, context)
+    sim = arbor.simulation(recipe, context, domains)
 
     sim.record(arbor.spike_recording.all)
 

@@ -38,7 +38,7 @@ class SingleRecipe(arbor.recipe):
         self.the_props = arbor.neuron_cable_properties()
         self.the_cat = catalogue
         self.the_cat.extend(arbor.default_catalogue(), "")
-        self.the_props.register(self.the_cat)
+        self.the_props.catalogue = self.the_cat
 
         self.config = config
 
@@ -88,8 +88,8 @@ class SingleRecipe(arbor.recipe):
         lif.set("g_reset", neuron_config["g_reset"])
         lif.set("g_leak", neuron_config["g_leak"])
         lif.set("tau_refrac", neuron_config["tau_refrac"])
-        decor.paint('(all)', lif)
-        decor.place('"center"', arbor.spike_detector(v_thresh), "spike_detector")
+        decor.paint('(all)', arbor.density(lif))
+        decor.place('"center"', arbor.threshold_detector(v_thresh), "spike_detector")
 
         # plastic synapse
         syn_config_homeostasis = self.config["stimulus"]["steady"]
@@ -98,16 +98,16 @@ class SingleRecipe(arbor.recipe):
         mech_expsyn_homeostasis.set('e', syn_config_homeostasis["reversal_potential"])
         mech_expsyn_homeostasis.set('dw_plus', syn_config_homeostasis["dw_plus"])
         mech_expsyn_homeostasis.set('dw_minus', syn_config_homeostasis["dw_minus"])
-        decor.place('"center"', mech_expsyn_homeostasis, "expsyn_homeostasis")
+        decor.place('"center"', arbor.synapse(mech_expsyn_homeostasis), "expsyn_homeostasis")
 
         # static synapse
         syn_config = self.config["stimulus"]["varying"]
         mech_expsyn_varying = arbor.mechanism('expsyn')
         mech_expsyn_varying.set('tau', syn_config["tau"])
         mech_expsyn_varying.set('e', syn_config["reversal_potential"])
-        decor.place('"center"', mech_expsyn_varying, "expsyn")
+        decor.place('"center"', arbor.synapse(mech_expsyn_varying), "expsyn")
 
-        return arbor.cable_cell(tree, labels, decor)
+        return arbor.cable_cell(tree, decor, labels)
 
     def event_generators(self, gid):
         """Return event generators on gid."""
@@ -158,7 +158,7 @@ def main(config, catalogue):
 
     context = arbor.context()
     domains = arbor.partition_load_balance(recipe, context)
-    sim = arbor.simulation(recipe, domains, context)
+    sim = arbor.simulation(recipe, context, domains)
 
     sim.record(arbor.spike_recording.all)
 

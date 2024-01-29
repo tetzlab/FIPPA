@@ -104,11 +104,11 @@ class SingleRecipe(arbor.recipe):
         adex.set("tau_w", neuron_config["tau_w"])
 
         decor.paint('(all)', arbor.density(adex))
-        decor.place('"center"', arbor.spike_detector(v_thresh), "spike_detector")
+        decor.place('"center"', arbor.threshold_detector(v_thresh), "spike_detector")
 
         decor.place('"center"', arbor.iclamp(stimulus_config["amplitude"]/1e-9), "iclamp")
 
-        return arbor.cable_cell(tree, labels, decor)
+        return arbor.cable_cell(tree, decor, labels)
 
     def event_generators(self, gid):
         """Return event generators on gid."""
@@ -140,7 +140,7 @@ def main(variant):
 
     context = arbor.context()
     domains = arbor.partition_load_balance(recipe, context)
-    sim = arbor.simulation(recipe, domains, context)
+    sim = arbor.simulation(recipe, context, domains)
 
     sim.record(arbor.spike_recording.all)
 

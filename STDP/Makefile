@@ -1,6 +1,6 @@
 .DEFAULT_GOAL := comparison_brian2_arbor.png
 
-BUILD_CATALOGUE_SCRIPT := build-catalogue
+BUILD_CATALOGUE_SCRIPT := arbor-build-catalogue
 
 custom-catalogue.so: $(wildcard mechanisms/*.mod)
 	$(BUILD_CATALOGUE_SCRIPT) custom mechanisms

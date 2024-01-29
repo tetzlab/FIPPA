@@ -1,22 +1,22 @@
 # FIPPA: The Functional Interplay between Plasticity Processes on Arbor
 
-The goal of FIPPA is to extend the neural network simulator
+The goal of the FIPPA project was to extend the neural network simulator
 [Arbor](https://arbor-sim.github.io) by key plasticity processes that
-will allow to simulate and analyze the long-term adaptive dynamics of
-large-scale, morphologically-detailed neuronal networks.The models
-that will be ported and augmented are based on the neuro-theoretical
-framework by [tetzlab.com](https://tetzlab.com). These models already
-indicated that the interplay between the plasticity processes of
-synaptic plasticity, synaptic scaling, and structural plasticity
-yields the formation and organization of motor memories.The research
-question is how multi-compartment neuron models with detailed synaptic
-dynamics can be utilized to improve the performance of such
-networks. Our main hypothesis is that the adaptive dynamics on the
-network level enforces the specialization of branches by the formation
-of synaptic clusters leading to the formation of self-sustaining
-long-term memories and an overall increase in storage capacity.
+allow to simulate and analyze the long-term adaptive dynamics of
+large-scale, morphologically-detailed neuronal networks. The models
+were ported and augmented in correspondence to neuro-theoretical
+investigations by the [Tetzlaff research group](https://tetzlab.com) at
+University of Göttingen.
 
-# Outputs
+## Arbor implementations -- FIPPA output
 
-* [Event-driven plasticity](STDP)
+* [Spike-timing-dependent plasticity (STDP)](STDP)
 * [Spike-based homeostasis](spike_based_homeostasis)
+* [Adaptive exponential integrate-and-fire (AdEx) neuron](AdEx)
+* [Synaptic tagging and capture (STC) in recurrent networks of point neurons](https://github.com/tetzlab/arbor_network_consolidation)
+
+## Arbor implementations -- based on FIPPA
+
+* Calcium-based synaptic plasticity
+* Heterosynaptic calcium-based plasticity in dendrites
+* Synaptic tagging and capture (STC) in recurrent networks of morphological neurons
