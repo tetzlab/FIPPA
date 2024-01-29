@@ -23,7 +23,7 @@ jobs:
         uses: actions/checkout@v2
         with:
           repository: arbor-sim/arbor
-          ref: v0.5.2
+          ref: v0.9.0
           path: arbor
           submodules: true
 
