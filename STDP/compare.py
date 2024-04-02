@@ -5,10 +5,30 @@
 import json
 import numpy as np
 import matplotlib.pyplot as plt
+import scipy.stats
+import sklearn.metrics
 
+def compute_and_print_goodness(data_1, data_2):
+    """
+    Computes and prints R^2 and RMSE measures for two given datasets (uses two different ways to compute each measure).
+    """
+    # compute R^2 (cf. https://stackoverflow.com/questions/893657/how-do-i-calculate-r-squared-using-python-and-numpy)
+    fit_result = scipy.stats.linregress(data_1, data_2)
+    rsq_scipy = fit_result.rvalue**2
+    rsq_skl = sklearn.metrics.r2_score(data_1, data_2)
+    print(f"  R^2 (scipy) = {rsq_scipy}\n"
+          f"  R^2 (scikit-learn) = {rsq_skl}")
+    
+    # compute RMSE
+    rmse_numpy = np.linalg.norm(data_1 - data_2) / np.sqrt(len(data_1))
+    rmse_skl = np.sqrt(sklearn.metrics.mean_squared_error(data_1, data_2))
+    print(f"  RMSE (numpy) = {rmse_numpy}\n"
+          f"  RMSE (scikit-learn) = {rmse_skl}")
+    
 
 def main(variant):
-    """Plots comparisons of spikes and traces between Brian2 and Arbor
+    """
+    Plots comparisons of spikes and traces between Brian2 and Arbor
     """
     config_lif = json.load(open(f"config_{variant}_lif.json"))
     config_classical = json.load(open(f"config_{variant}_classical.json"))
@@ -21,9 +41,13 @@ def main(variant):
     # plot trace comparisons for LIF neurons
     arbor_data = np.loadtxt(f'arbor_traces_{variant}_lif.dat')
     brian_data = np.loadtxt(f'brian2_traces_{variant}_lif.dat')
+    print("---------------------------------\n"
+          "Data for trace comparison loaded.")
 
     # time, membrane voltage, excitatory conductance, inhibitory conductance,
     # weight
+    ylabels = ["Membrane potential (mV)", "Excitatory conductance (µS)", "Inhibitory conductance (µS)",
+               "Excitatory weight (µS)"]
     for i in range(1, 5):
 
         for spike_time in stimulus_times_exc:
@@ -46,10 +70,12 @@ def main(variant):
                               label='Brian', linestyle='dashed', marker='None')
         axes.flat[i - 1].set_xlabel("Time (ms)")
 
-    axes.flat[0].set_ylabel("Membrane potential (mV)")
-    axes.flat[1].set_ylabel("Excitatory conductance (µS)")
-    axes.flat[2].set_ylabel("Inhibitory conductance (µS)")
-    axes.flat[3].set_ylabel("Excitatory weight (µS)")
+        axes.flat[i - 1].set_ylabel(ylabels[i - 1])
+
+        # compute and print R^2 and RMSE
+        print(f"{ylabels[i - 1]}:")
+        compute_and_print_goodness(arbor_data[:, i], brian_data[:, i])
+
 
     # plot spike comparison for LIF neurons
     arbor_spikes = np.loadtxt(f'arbor_spikes_{variant}_lif.dat')
@@ -66,9 +92,13 @@ def main(variant):
         
     #axes.flat[-1].set_axis_off()
         
-    # plot comparison for classical STDP curve
+    # load data from files
     arbor_classical_data = np.loadtxt(f'arbor_traces_{variant}_classical.dat')
     brian_classical_data = np.loadtxt(f'brian2_traces_{variant}_classical.dat')
+    print("--------------------------------------\n"
+          "Data for classical STDP curves loaded.")
+
+    # plot comparison for classical STDP curve
     axes.flat[5].plot(arbor_classical_data[:, 0], arbor_classical_data[:, 1],
                       label='Arbor', marker='None')
     axes.flat[5].plot(brian_classical_data[:, 0], brian_classical_data[:, 1],
@@ -80,6 +110,10 @@ def main(variant):
 
     fig.savefig(f'comparison_{variant}.png')
     fig.savefig(f'comparison_{variant}.svg')
+
+    # compute and print R^2 and RMSE
+    compute_and_print_goodness(arbor_classical_data[:, 1], brian_classical_data[:, 1])
+
 
 
 if __name__ == '__main__':
