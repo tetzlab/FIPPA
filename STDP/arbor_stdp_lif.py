@@ -136,7 +136,7 @@ def main(variant):
     """Runs simulation and stores results."""
 
     # set up simulation and run
-    config = json.load(open(f"config_{variant}.json", 'r'))
+    config = json.load(open(f"config_{variant}_lif.json", 'r'))
     recipe = SingleRecipe(config)
 
     context = arbor.context()
@@ -166,8 +166,8 @@ def main(variant):
 
     spike_times = sorted([s[1] for s in sim.spikes()])
 
-    numpy.savetxt(f'arbor_traces_{variant}.dat', data_stacked)
-    numpy.savetxt(f'arbor_spikes_{variant}.dat', spike_times)
+    numpy.savetxt(f'arbor_traces_{variant}_lif.dat', data_stacked)
+    numpy.savetxt(f'arbor_spikes_{variant}_lif.dat', spike_times)
 
 
 if __name__ == '__main__':

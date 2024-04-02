@@ -12,4 +12,5 @@ variant="$1"
 # Set up environment for Brian2, e.g.,
 # source ~/brian2/venv/bin/activate
 
-./brian2_lif_stdp.py "$variant"
+./brian2_stdp_lif.py "$variant"
+./brian2_stdp_classical.py "$variant"

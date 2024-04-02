@@ -15,7 +15,7 @@
 		"specific_capacitance" : 0.01
 	},
 	"synapses" : {
-			"cond_exp_stdp" : {
+		"cond_exp_stdp" : {
 			"tau" : 5.0,
 			"reversal_potential" : 0.0,
 			"tau_pre" : 20.0,
@@ -27,7 +27,7 @@
 								 605, 633, 634, 644, 648, 651, 663, 668, 669, 677, 678, 685, 692,
 								 701, 706, 710, 719, 819, 843, 930, 941, 997],
 			"weight" : 1.0
-			},
+		},
 		"cond_exp" : {
 			"reversal_potential" : -80,
 			"tau" : 10.0,

@@ -1,7 +1,5 @@
 #!/usr/bin/env python3
-"""Brian2 simulation of a single cell
-
-Brian2 simulation of a single cell receiving inhibitory and plastic
+"""Brian 2 simulation of a single cell receiving inhibitory and plastic
 excitatory stimulus.
 """
 
@@ -14,9 +12,10 @@ from brian2 import run, defaultclock
 
 
 def main(variant):
-    """Runs simulation and stores results."""
+    """Runs simulation with spikes generated at specific times
+    and stores results."""
 
-    config = json.load(open(f"config_{variant}.json"))
+    config = json.load(open(f"config_{variant}_lif.json"))
     neuron_config = config["neuron"]
     # sphere with 200 um radius
     area = 4 * np.pi * (neuron_config["radius"] * umeter)**2
@@ -62,20 +61,21 @@ def main(variant):
     A_pre = syn_config_stdp["A_pre"] * uS
     A_post = syn_config_stdp["A_post"] * uS
 
-    S_exc = Synapses(ssg_exc, neurons, '''w : siemens
+    S_exc = Synapses(ssg_exc, neurons,
+                 '''w : siemens
                  dapre/dt = -apre/tau_pre : siemens (event-driven)
                  dapost/dt = -apost/tau_post : siemens (event-driven)
                  ''',
-                     on_pre='''
+                 on_pre='''
                  ge += w
                  apre += A_pre
                  w += apost
                  ''',
-                     on_post='''
+                 on_post='''
                  apost += A_post
                  w += apre
                  ''',
-                     delay=0 * ms)
+                 delay=0 * ms)
 
     S_exc.connect('True')
     S_exc.w = syn_config_stdp["weight"] * uS
@@ -91,11 +91,11 @@ def main(variant):
 
     run(config["simulation"]["runtime"] * ms)
 
-    np.savetxt(f'brian2_traces_{variant}.dat', np.column_stack(
+    np.savetxt(f'brian2_traces_{variant}_lif.dat', np.column_stack(
         [neuron_monitor.t / ms, neuron_monitor.v[0] / mV,
          neuron_monitor.ge[0] / uS, neuron_monitor.gi[0] / uS,
          synapse_monitor.w[0] / uS]))
-    np.savetxt(f'brian2_spikes_{variant}.dat', spikemon.t / ms)
+    np.savetxt(f'brian2_spikes_{variant}_lif.dat', spikemon.t / ms)
 
 
 if __name__ == '__main__':

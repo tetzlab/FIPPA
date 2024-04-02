@@ -1,0 +1,22 @@
+{
+	"simulation" : {
+		"dt" : 0.01,
+		"runtime" : 50,
+		"N" : 100
+	},
+	"neuron" : {
+		"type" : "simple_spiker",
+		"tau_refrac" : 100.0,
+		"radius" : 200
+	},
+	"synapses" : {
+		"stdp" : {
+			"tau_pre" : 20.0,
+			"tau_post" : 20.0,
+			"A_pre" : 0.01,
+			"A_post" : -0.0105,
+			"weight" : 0.0
+		}
+	}
+}
+
