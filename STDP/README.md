@@ -1,38 +1,38 @@
-# Event-driven plasticity
+# Spike-driven plasticity
 
 [![Event-driven plasticity](https://github.com/tetzlab/FIPPA/actions/workflows/STDP.yml/badge.svg)](https://github.com/tetzlab/FIPPA/actions/workflows/STDP.yml)
 
-With input from FIPPA, Arbor was extended with the possibility for event-driven plasticity.
+A synapse with spike-timing-dependent plasticity (STDP) has been added to Arbor.
 
-A synapse with spike-timing dependent plasticity (STDP) has been added to Arbor.
+The implementation is validated against the Brian 2 simulator.
 
-The implementation is validated against the Brian2 simulator.
+# How to
 
-# Howto
+First, install Arbor. If you install from source, make sure `build-catalogue` from the Arbor
+scripts directory is in `PATH`, or modify the `Makefile` accordingly.
 
-Install Arbor from source and make sure `build-catalogue` from the Arbor scripts directory
-is in `PATH` or modify the `Makefile` accordingly.
+Next, if necessary, adapt `run_arbor.sh` and `run_brian2.sh` to your environment.
 
-Adapt `run_arbor.sh` and `run_brian2.sh` to your environment.
-
-```shell
-make
-```
-
-Parameters can be changed in `config_brian2_arbor.json` or copied to a new configuration
+Parameters can be changed in `config_brian2_arbor_*.json` or copied to a new configuration
 file, e.g., `config_modified.json`.
 
-Then call `make` like below:
+Then, call `make` like below for the modified configuration:
 
 ```shell
 make comparison_modified.png
 ```
+
+Or simply call
+
+```shell
+make
+```
+for the default configuration.
 
 ![Comparison between Arbor and Brian2](comparison_brian2_arbor.png)
 
 # Requirements
 
 * [Brian2](https://briansimulator.org) >= 2.4.2
-* [Arbor](https://github.com/arbor-sim/arbor) >= 0.5.2
-* [LIF mechanism for Arbor](https://github.com/arbor-sim/arbor/pull/1517)
+* [Arbor](https://github.com/arbor-sim/arbor) >= 0.9.0
 * [matplotlib](https://matplotlib.org) >= 3.4.1
