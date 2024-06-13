@@ -8,7 +8,7 @@ were ported and augmented in correspondence to neuro-theoretical
 investigations by the [Tetzlaff research group](https://tetzlab.com) at
 University of Göttingen.
 
-## Arbor implementations -- FIPPA output
+## Arbor implementations -- output of FIPPA
 
 * [Spike-timing-dependent plasticity (STDP)](STDP)
 * [Spike-based homeostasis](spike_based_homeostasis)
