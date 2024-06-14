@@ -2,18 +2,19 @@
 
 BUILD_CATALOGUE_SCRIPT := arbor-build-catalogue
 CONFIG := config_arbor.json
+NUM_TRIALS := 100
 
 homeostasis-catalogue.so: $(wildcard mechanisms/*.mod)
 	$(BUILD_CATALOGUE_SCRIPT) homeostasis mechanisms
 
-arbor_spikes.dat arbor_traces.dat: homeostasis-catalogue.so $(CONFIG) arbor_homeostasis.py
-	./arbor_homeostasis.py $(CONFIG) --catalogue ./$<
+arbor_input.dat arbor_traces.dat arbor_spikes.dat: homeostasis-catalogue.so $(CONFIG) arbor_homeostasis.py
+	./run_arbor.sh $(CONFIG) $(NUM_TRIALS) --catalogue ./$<
 
-brian2_spikes.dat brian2_traces.dat: config_brian2.json brian2_homeostasis.py
-	./brian2_homeostasis.py config_brian2.json
+brian2_input.dat brian2_traces.dat brian2_spikes.dat: config_brian2.json brian2_homeostasis.py
+	./run_brian2.sh config_brian2.json $(NUM_TRIALS)
 
-homeostasis.svg: arbor_input.dat arbor_traces.dat brian2_input.dat brian2_traces.dat compare.py
-	./compare.py $(CONFIG) --save homeostasis.svg
+homeostasis.svg: arbor_input.dat arbor_traces.dat arbor_spikes.dat brian2_input.dat brian2_traces.dat brian2_spikes.dat compare.py
+	./compare.py $(CONFIG) $(NUM_TRIALS) --save homeostasis.svg
 
 .PHONY: clean
 clean:

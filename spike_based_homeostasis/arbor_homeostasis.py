@@ -29,12 +29,15 @@ def generate_poisson_spike_train(rate, duration):
 class SingleRecipe(arbor.recipe):
     """Implementation of Arbor simulation recipe."""
 
-    def __init__(self, config, catalogue):
+    def __init__(self, config, cat_file):
         """Initialize the recipe from config."""
 
         # The base C++ class constructor must be called first, to ensure that
         # all memory in the C++ class is initialized correctly.
         arbor.recipe.__init__(self)
+
+        # load custom catalogue
+        catalogue = arbor.load_catalogue(cat_file)
 
         self.the_props = arbor.neuron_cable_properties()
         self.the_cat = catalogue
@@ -192,8 +195,7 @@ def main(config_file, catalogue):
 
     spike_times = sorted([s[1] for s in sim.spikes()])
 
-    numpy.savetxt(f'arbor_traces.dat', data_stacked)
-    numpy.savetxt(f'arbor_spikes.dat', spike_times)
+    return data_stacked, spike_times
 
 
 if __name__ == '__main__':
@@ -201,10 +203,20 @@ if __name__ == '__main__':
     import argparse
     parser = argparse.ArgumentParser()
     parser.add_argument('config', help="name of config file")
+    parser.add_argument('num_trials', type=int, help="number of trials to consider")
     parser.add_argument('--catalogue', help="name of catalogue file library", default="homeostasis-catalogue.so")
     args = parser.parse_args()
 
-    # load custom catalogue
-    catalogue = arbor.load_catalogue(args.catalogue)
-
-    main(args.config, catalogue)
+    num_trials = args.num_trials
+    data_stacked_sum = numpy.array([])
+    spike_times_all = []
+    for i in range(num_trials):
+        data_stacked, spike_times = main(args.config, args.catalogue)
+        if data_stacked_sum.size == 0:
+            data_stacked_sum = numpy.array(data_stacked)
+        else:
+            data_stacked_sum += data_stacked
+        spike_times_all.extend(spike_times)
+    
+    numpy.savetxt(f'arbor_traces.dat', data_stacked_sum / num_trials)
+    numpy.savetxt(f'arbor_spikes.dat', spike_times_all)

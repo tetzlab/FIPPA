@@ -88,7 +88,7 @@ def main(config_file):
     defaultclock.dt = config["simulation"]["dt"]*ms
     run(duration, report='text')
 
-    # collect data and store
+    # collect and store data
     input_dts = np.arange(0., len(varying_stimulus.values)*varying_stimulus.dt/ms, varying_stimulus.dt/ms)
     input_x = list(itertools.chain(*zip(input_dts, input_dts)))
     input_y = [0] + list(itertools.chain(*zip(varying_stimulus.values, varying_stimulus.values)))[:-1]
@@ -97,9 +97,11 @@ def main(config_file):
     spike_times_with = SM_with.t/ms
     spike_times_without = SM_without.t/ms
     np.savetxt(f'brian2_input.dat', input_stacked)
-    np.savetxt(f'brian2_traces.dat', results_stacked)
-    np.savetxt(f'brian2_spikes.dat', spike_times_with)
-    np.savetxt(f'brian2_spikes_without_homestasis.dat', spike_times_without)
+    #np.savetxt(f'brian2_traces.dat', results_stacked)
+    #np.savetxt(f'brian2_spikes.dat', spike_times_with)
+    #np.savetxt(f'brian2_spikes_without_homestasis.dat', spike_times_without)
+
+    return results_stacked, spike_times_with, spike_times_without
 
 
 if __name__ == '__main__':
@@ -107,6 +109,19 @@ if __name__ == '__main__':
     import argparse
     parser = argparse.ArgumentParser()
     parser.add_argument('config', help="name of config file")
+    parser.add_argument('num_trials', type=int, help="number of trials to consider")
     args = parser.parse_args()
 
-    main(args.config)
+    num_trials = args.num_trials
+    data_stacked_sum = np.array([])
+    spike_times_all = []
+    for i in range(num_trials):
+        data_stacked, spike_times_with, _ = main(args.config)
+        if data_stacked_sum.size == 0:
+            data_stacked_sum = np.array(data_stacked)
+        else:
+            data_stacked_sum += data_stacked
+        spike_times_all.extend(spike_times_with)
+    
+    np.savetxt(f'brian2_traces.dat', data_stacked_sum / num_trials)
+    np.savetxt(f'brian2_spikes.dat', spike_times_all)

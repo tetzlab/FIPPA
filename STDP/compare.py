@@ -103,7 +103,7 @@ def main(variant):
                       label='Arbor', marker='None')
     axes.flat[5].plot(brian_classical_data[:, 0], brian_classical_data[:, 1],
                       label='Brian', linestyle='dashed', marker='None')
-    axes.flat[5].set_xlabel(r'Time difference $\Delta t$ (ms)')
+    axes.flat[5].set_xlabel(r'Time delay $\Delta t$ (ms)')
     axes.flat[5].set_ylabel(r'Weight change $\Delta w$ (µS)')
 
     fig.legend(*axes[0, 0].get_legend_handles_labels(), loc="lower right")

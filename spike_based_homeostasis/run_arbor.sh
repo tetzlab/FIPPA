@@ -2,13 +2,6 @@
 
 set -euo pipefail
 
-if [[ $# -ne 1 ]]; then
-	echo "Missing configuration file. Usage: $(basename "$0") <config_file>"
-	#exit 2
-fi
-
-config="$1"
-
 # Set up environment for Arbor, e.g.,
 # export PATH=$(readlink -f ~/local/bin):$PATH
 # export PYTHONPATH=$(readlink -f ~/local/lib/python3.8/site-packages):${PYTHONPATH-}
@@ -16,4 +9,4 @@ config="$1"
 # or,
 # source set_arbor_env
 
-./arbor_homeostasis.py "$config"
+./arbor_homeostasis.py "$@"
