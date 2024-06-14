@@ -1,6 +1,6 @@
 NEURON {
     POINT_PROCESS expsyn_homeostasis
-    RANGE tau, e, dw_plus, dw_minus
+    RANGE tau, e, dw_plus, dw_minus, w_max
     NONSPECIFIC_CURRENT i
 }
 
@@ -13,6 +13,7 @@ PARAMETER {
     e = 0 (mV) : reversal potential
     dw_plus = 0.05 (uS) : weight change on pre spike
     dw_minus = 0.05 (uS) : weight change on post spike
+    w_max = 2 (uS) : maximum weight
 }
 
 STATE {
@@ -28,6 +29,13 @@ INITIAL {
 BREAKPOINT {
     SOLVE state METHOD cnexp
     i = g*(v-e)
+
+    : apply weight bounds
+    if (weight_plastic > w_max) {
+        weight_plastic = w_max
+    } else if (weight_plastic < 0) {
+        weight_plastic = 0
+    }
 }
 
 DERIVATIVE state {
