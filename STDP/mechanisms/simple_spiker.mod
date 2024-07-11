@@ -1,5 +1,5 @@
 : Simple spiker neuron
-: SPikes when refactory period.
+: Spikes when not in refactory period.
 : The spike detector threshold should match the threshold of the mechanism.
 
 NEURON {

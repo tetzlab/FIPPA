@@ -36,3 +36,5 @@ for the default configuration.
 * [Brian2](https://briansimulator.org) >= 2.4.2
 * [Arbor](https://github.com/arbor-sim/arbor) >= 0.9.0
 * [matplotlib](https://matplotlib.org) >= 3.4.1
+* [scipy](https://scipy.org/) >= 1.11.4
+* [scikit-learn](https://scikit-learn.org) >= 1.5.0

@@ -1,21 +1,39 @@
-.DEFAULT_GOAL := homeostasis.svg
+.DEFAULT_GOAL := init
 
 BUILD_CATALOGUE_SCRIPT := arbor-build-catalogue
-CONFIG := config_arbor.json
-NUM_TRIALS := 100
+CONFIG := config.json
+NUM_TRIALS := 50
+
+init:
+ifeq ($(strip $(CASE)),control)
+	@echo "Running control case..."
+	@$(MAKE) no_homeostasis.svg
+else
+	@echo "Running target case..."
+	@$(MAKE) homeostasis.svg
+endif
 
 homeostasis-catalogue.so: $(wildcard mechanisms/*.mod)
 	$(BUILD_CATALOGUE_SCRIPT) homeostasis mechanisms
 
-arbor_input.dat arbor_traces.dat arbor_spikes.dat: homeostasis-catalogue.so $(CONFIG) arbor_homeostasis.py
-	./run_arbor.sh $(CONFIG) $(NUM_TRIALS) --catalogue ./$<
+arbor_input_0.dat arbor_traces_0.dat arbor_spikes_0.dat: homeostasis-catalogue.so $(CONFIG) arbor_homeostasis.py
+	./run_arbor.sh $(CONFIG) $(NUM_TRIALS) 0 --catalogue ./$<
 
-brian2_input.dat brian2_traces.dat brian2_spikes.dat: config_brian2.json brian2_homeostasis.py
-	./run_brian2.sh config_brian2.json $(NUM_TRIALS)
+arbor_input_1.dat arbor_traces_1.dat arbor_spikes_1.dat: homeostasis-catalogue.so $(CONFIG) arbor_homeostasis.py
+	./run_arbor.sh $(CONFIG) $(NUM_TRIALS) 1 --catalogue ./$<
 
-homeostasis.svg: arbor_input.dat arbor_traces.dat arbor_spikes.dat brian2_input.dat brian2_traces.dat brian2_spikes.dat compare.py
-	./compare.py $(CONFIG) $(NUM_TRIALS) --save homeostasis.svg
+brian2_input_0.dat brian2_traces_0.dat brian2_spikes_0.dat: $(CONFIG) brian2_homeostasis.py
+	./run_brian2.sh $(CONFIG) $(NUM_TRIALS) 0
 
-.PHONY: clean
+brian2_input_1.dat brian2_traces_1.dat brian2_spikes_1.dat: $(CONFIG) brian2_homeostasis.py
+	./run_brian2.sh $(CONFIG) $(NUM_TRIALS) 1
+
+no_homeostasis.svg: arbor_input_0.dat arbor_traces_0.dat arbor_spikes_0.dat brian2_input_0.dat brian2_traces_0.dat brian2_spikes_0.dat compare.py
+	./compare.py $(CONFIG) $(NUM_TRIALS) 0 --save no_homeostasis.svg
+
+homeostasis.svg: arbor_input_1.dat arbor_traces_1.dat arbor_spikes_1.dat brian2_input_1.dat brian2_traces_1.dat brian2_spikes_1.dat compare.py
+	./compare.py $(CONFIG) $(NUM_TRIALS) 1 --save homeostasis.svg
+
+.PHONY: init clean
 clean:
 	rm -f *svg *so *dat

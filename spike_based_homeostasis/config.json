@@ -1,0 +1,32 @@
+{
+	"simulation" : {
+		"dt" : 0.1,
+		"runtime" : 40000
+	},
+	"neuron" : {
+		"type" : "lif",
+		"v_thresh" : -55.0,
+		"e_leak" : -65.0,
+		"e_reset" : -70.0,
+		"tau_e" : 30,
+		"g_leak" : 1e-4,
+		"g_reset" : 1000.0,
+		"t_ref" : 2.0,
+		"radius" : 2
+	},
+	"stimulus" : {
+		"steady" : {
+			"rates" : [50],
+			"dt" : 40000,
+			"dw_plus" : 0.35,
+			"dw_minus" : 0.35,
+			"w_init" : 0.0,
+			"w_max" : 5.0
+			},
+		"varying" : {
+			"rates" : [25, 50, 0, 35, 0],
+			"dt" : 10000,
+			"w_non_plastic" : 3.5
+		}
+	}
+}

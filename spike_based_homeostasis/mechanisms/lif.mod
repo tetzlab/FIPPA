@@ -7,7 +7,7 @@
 NEURON {
     SUFFIX lif
     NONSPECIFIC_CURRENT i
-    RANGE g_reset, g_leak, e_reset, e_leak, e_thresh, tau_refrac
+    RANGE g_reset, g_leak, e_reset, e_leak, e_thresh, tau_refrac, i_factor
 }
 
 UNITS {
@@ -32,6 +32,8 @@ PARAMETER {
     e_thresh = -50 (mV) : spike threshold
 
     tau_refrac = 0.1 (ms) : refractory period
+
+	i_factor  =   1       : current to current density conversion factor (nA to mA/cm^2; for point neurons)
 }
 
 BREAKPOINT {
@@ -54,9 +56,13 @@ BREAKPOINT {
        e = e_leak
     }
 
-    i = g*(v - e)
+    :i = g*(v - e)
+	: current density in units of mA/cm^2
+	i = g*(v - e) * i_factor
 }
 
 DERIVATIVE state {
-    refractory_counter' = 1
+    if (refractory_counter <= tau_refrac) {
+        refractory_counter' = 1
+	}
 }

@@ -29,12 +29,22 @@ Then, simply call
 ```shell
 make
 ```
-to obtain the following plot.
+to obtain the following plot:
 
 ![Demonstration of spike-based homeostasis](homeostasis.svg)
+
+or call
+
+```shell
+make CASE=control
+```
+for the following control case without plasticity:
+
+![Control case for spike-based homeostasis](no_homeostasis.svg)
 
 # Requirements
 
 * [Brian2](https://briansimulator.org) >= 2.4.2
 * [Arbor](https://github.com/arbor-sim/arbor) >= 0.9.0
 * [matplotlib](https://matplotlib.org) >= 3.4.1
+* [scikit-learn](https://scikit-learn.org) >= 1.5.0
