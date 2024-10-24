@@ -9,11 +9,15 @@ import sklearn.metrics
 
 def compute_and_print_goodness(data_1, data_2):
     """
-    Computes and prints R^2 and RMSE measures for two given datasets (uses two different ways to compute each measure).
+    Computes and prints R^2, CV, and RMSE measures for two given datasets.
     """
     # compute R^2
     rsq = sklearn.metrics.r2_score(data_1, data_2)
     print(f"  R^2 = {rsq}")
+
+	# compute coefficient of variation
+    cv = sklearn.metrics.explained_variance_score(data_1, data_2)
+    print(f"  CV = {cv}")
     
     # compute RMSE
     rmse = np.sqrt(sklearn.metrics.mean_squared_error(data_1, data_2))

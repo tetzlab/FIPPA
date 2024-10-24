@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/bin/env python3.10
 """Brian 2 simulation of a single cell receiving inhibitory and plastic
 excitatory stimulus (from https://brian2.readthedocs.io/en/stable/examples/synapses.spike_based_homeostasis.html).
 """

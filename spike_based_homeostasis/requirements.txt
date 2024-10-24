@@ -1,3 +1,4 @@
+arbor==0.10.0
 numpy
 matplotlib
 brian2

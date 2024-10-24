@@ -19,7 +19,7 @@ The implementation is validated against the Brian 2 simulator (also see [here](h
 First, install Arbor. If you install from source, make sure `arbor-build-catalogue` from the Arbor
 scripts directory is in `PATH`, or modify the `Makefile` accordingly.
 
-Next, if necessary, adapt `run_arbor.sh` and `run_brian2.sh` to your environment.
+Next, if necessary, adapt `run_arbor.sh` and `run_brian2.sh` according to your environment.
 
 Parameters can be changed in `config.json` or copied to a new configuration
 file, e.g., `config_modified.json`.
@@ -29,22 +29,30 @@ Then, simply call
 ```shell
 make
 ```
-to obtain the following plot:
+to obtain the following plots:
 
+Target case with plasticity:
 ![Demonstration of spike-based homeostasis](homeostasis.svg)
 
-or call
+Control case without plasticity:
+
+![Control case for spike-based homeostasis](no_homeostasis.svg)
+
+You may also call
+
+```shell
+make CASE=target
+```
+or
 
 ```shell
 make CASE=control
 ```
-for the following control case without plasticity:
-
-![Control case for spike-based homeostasis](no_homeostasis.svg)
+to run the two cases separately.
 
 # Requirements
 
 * [Brian2](https://briansimulator.org) >= 2.4.2
-* [Arbor](https://github.com/arbor-sim/arbor) >= 0.9.0
+* [Arbor](https://github.com/arbor-sim/arbor) == 0.10.0
 * [matplotlib](https://matplotlib.org) >= 3.4.1
 * [scikit-learn](https://scikit-learn.org) >= 1.5.0

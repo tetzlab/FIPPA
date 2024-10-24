@@ -1,20 +1,22 @@
 .DEFAULT_GOAL := init
 
-BUILD_CATALOGUE_SCRIPT := arbor-build-catalogue
 CONFIG := config.json
 NUM_TRIALS := 50
 
 init:
-ifeq ($(strip $(CASE)),control)
+ifeq ($(strip $(CASE)),target)
+	@echo "Running target case..."
+	@$(MAKE) homeostasis.svg
+else ifeq ($(strip $(CASE)),control)
 	@echo "Running control case..."
 	@$(MAKE) no_homeostasis.svg
 else
-	@echo "Running target case..."
-	@$(MAKE) homeostasis.svg
+	@echo "Running target and control case..."
+	@$(MAKE) homeostasis.svg no_homeostasis.svg
 endif
 
 homeostasis-catalogue.so: $(wildcard mechanisms/*.mod)
-	$(BUILD_CATALOGUE_SCRIPT) homeostasis mechanisms
+	./build_arbor_catalogue.sh homeostasis mechanisms
 
 arbor_input_0.dat arbor_traces_0.dat arbor_spikes_0.dat: homeostasis-catalogue.so $(CONFIG) arbor_homeostasis.py
 	./run_arbor.sh $(CONFIG) $(NUM_TRIALS) 0 --catalogue ./$<

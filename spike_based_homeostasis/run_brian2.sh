@@ -2,7 +2,7 @@
 
 set -euo pipefail
 
-# Set up environment for Brian2, e.g.,
+# If necessary, set up environment for Brian 2, e.g., via
 # source ~/brian2/venv/bin/activate
 
 ./brian2_homeostasis.py "$@"
