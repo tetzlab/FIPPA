@@ -21,7 +21,7 @@ def compute_and_print_goodness(data_1, data_2):
     print(f"  CV = {cv}")
     
     # compute RMSE
-    rmse = np.sqrt(sklearn.metrics.mean_squared_error(data_1, data_2))
+    rmse = np.sqrt(sklearn.metrics.root_mean_squared_error(data_1, data_2))
     print(f"  RMSE = {rmse}")
     
 
