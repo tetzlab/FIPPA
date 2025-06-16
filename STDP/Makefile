@@ -1,9 +1,7 @@
 .DEFAULT_GOAL := comparison_brian2_arbor.png
 
-BUILD_CATALOGUE_SCRIPT := arbor-build-catalogue
-
 custom-catalogue.so: $(wildcard mechanisms/*.mod)
-	$(BUILD_CATALOGUE_SCRIPT) custom mechanisms
+	./build_arbor_catalogue.sh custom mechanisms
 
 .PRECIOUS: arbor_traces_%_lif.dat arbor_spikes_%_lif.dat arbor_traces_%_classical.dat
 arbor_traces_%_lif.dat arbor_spikes_%_lif.dat: config_%_lif.json arbor_stdp_lif.py arbor_stdp_classical.py custom-catalogue.so config_brian2_arbor_lif.json config_brian2_arbor_classical.json
@@ -14,7 +12,7 @@ brian2_traces_%_lif.dat brian2_spikes_%_lif.dat brian2_traces_%_classical.dat: c
 	./run_brian2.sh $*
 
 comparison_%.png: arbor_traces_%_lif.dat arbor_spikes_%_lif.dat brian2_traces_%_lif.dat brian2_spikes_%_lif.dat brian2_traces_%_classical.dat compare.py
-	./compare.py $*
+	./compare.py $* > goodness_of_fit.txt
 
 .PHONY: clean
 clean:

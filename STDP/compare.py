@@ -37,6 +37,9 @@ def main(variant):
     stimulus_times_exc = config_lif["synapses"]["cond_exp_stdp"]["stimulus_times"]
     stimulus_times_inh = config_lif["synapses"]["cond_exp"]["stimulus_times"]
 
+    print(f"Number of exc. spikes: {len(stimulus_times_exc)}")
+    print(f"Number of inh. spikes: {len(stimulus_times_inh)}")
+
     # plot trace comparisons for LIF neurons
     arbor_data = np.loadtxt(f'arbor_traces_{variant}_lif.dat')
     brian_data = np.loadtxt(f'brian2_traces_{variant}_lif.dat')

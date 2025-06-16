@@ -31,10 +31,10 @@ brian2_input_1.dat brian2_traces_1.dat brian2_spikes_1.dat: $(CONFIG) brian2_hom
 	./run_brian2.sh $(CONFIG) $(NUM_TRIALS) 1
 
 no_homeostasis.svg: arbor_input_0.dat arbor_traces_0.dat arbor_spikes_0.dat brian2_input_0.dat brian2_traces_0.dat brian2_spikes_0.dat compare.py
-	./compare.py $(CONFIG) $(NUM_TRIALS) 0 --save no_homeostasis.svg
+	./compare.py $(CONFIG) $(NUM_TRIALS) 0 --save no_homeostasis.svg > goodness_of_fit_no_homeostasis.txt
 
 homeostasis.svg: arbor_input_1.dat arbor_traces_1.dat arbor_spikes_1.dat brian2_input_1.dat brian2_traces_1.dat brian2_spikes_1.dat compare.py
-	./compare.py $(CONFIG) $(NUM_TRIALS) 1 --save homeostasis.svg
+	./compare.py $(CONFIG) $(NUM_TRIALS) 1 --save homeostasis.svg > goodness_of_fit_homeostasis.txt
 
 .PHONY: init clean
 clean:

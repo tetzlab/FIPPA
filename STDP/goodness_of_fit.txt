@@ -1,0 +1,25 @@
+Number of exc. spikes: 48
+Number of inh. spikes: 48
+---------------------------------
+Data for trace comparison loaded.
+Membrane potential (mV):
+  R^2 = 0.9225185601737405
+  CV = 0.9225250580291524
+  RMSE = 1.264671156910316
+Excitatory conductance (µS):
+  R^2 = 0.9966098071294617
+  CV = 0.9966206685095039
+  RMSE = 0.48592329436300513
+Inhibitory conductance (µS):
+  R^2 = 0.9974095940568585
+  CV = 0.9974099125805992
+  RMSE = 0.1480193756507528
+Excitatory weight (µS):
+  R^2 = 0.9805796851641375
+  CV = 0.9995260074343995
+  RMSE = 1.0635040748384876
+--------------------------------------
+Data for classical STDP curves loaded.
+  R^2 = 0.9999998753026506
+  CV = 0.9999999174086973
+  RMSE = 0.0012670050528180792

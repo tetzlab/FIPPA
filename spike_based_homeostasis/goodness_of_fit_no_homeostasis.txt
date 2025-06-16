@@ -1,0 +1,8 @@
+Goodness of fit (weight):
+  R^2 = 1.0
+  CV = 1.0
+  RMSE = 0.0
+Goodness of fit (resulting rate):
+  R^2 = 0.9681837983187916
+  CV = 0.9683130468770806
+  RMSE = 1.7105866327868455
