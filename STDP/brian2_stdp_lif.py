@@ -15,7 +15,7 @@ def main(variant):
     """Runs simulation with spikes generated at specific times
     and stores results."""
 
-    config = json.load(open(f"config_{variant}_lif.json"))
+    config = json.load(open("config_lif.json"))
     neuron_config = config["neuron"]
     # sphere with 200 um radius
     area = 4 * np.pi * (neuron_config["radius"] * umeter)**2

@@ -1,11 +1,10 @@
 #!/usr/bin/env python3
-"""Plots to compare results from Brian 2 and Arbor
+"""Plots to compare results from Arbor and Brian 2 or NEST
 """
 
 import json
 import numpy as np
 import matplotlib.pyplot as plt
-import scipy.stats
 import sklearn.metrics
 
 def compute_and_print_goodness(data_1, data_2):
@@ -27,10 +26,30 @@ def compute_and_print_goodness(data_1, data_2):
 
 def main(variant):
     """
-    Plots comparisons of spikes and traces between Brian2 and Arbor
+    Plots comparison of spikes and traces between Arbor and Brian 2 or NEST
     """
-    config_lif = json.load(open(f"config_{variant}_lif.json"))
-    config_classical = json.load(open(f"config_{variant}_classical.json"))
+    config_lif = json.load(open("config_lif.json"))
+    config_classical = json.load(open("config_classical.json"))
+
+    # load data and check variant
+    trace_data_lif_arbor = np.loadtxt(f'arbor_traces_{variant}_lif.dat')
+    spike_data_lif_arbor = np.loadtxt(f'arbor_spikes_{variant}_lif.dat')
+    trace_data_classical_arbor = np.loadtxt(f'arbor_traces_{variant}_classical.dat')
+    if variant == "brian2_arbor":
+        trace_data_lif_ref = np.loadtxt(f'brian2_traces_{variant}_lif.dat')
+        spike_data_lif_ref = np.loadtxt(f'brian2_spikes_{variant}_lif.dat')
+        trace_data_classical_ref = np.loadtxt(f'brian2_traces_{variant}_classical.dat')
+        ref_name = "Brian"
+    elif variant == "nest_arbor":
+        trace_data_lif_ref = np.loadtxt(f'nest_traces_{variant}_lif.dat')
+        spike_data_lif_ref = np.loadtxt(f'nest_spikes_{variant}_lif.dat')
+        trace_data_classical_ref_without_time = np.loadtxt(f'nest_traces_{variant}_classical.dat')
+        trace_data_classical_ref = np.column_stack(
+          [trace_data_classical_arbor[:, 0],
+           trace_data_classical_ref_without_time]) # adding times from Arbor data (no data because NEST always has one addition postsynpatic spike, see "nest_stdp_classical.py")
+        ref_name = "NEST"
+    else:
+        raise ValueError(f"Unsupported variant: '{variant}'.")
 
     fig, axes = plt.subplots(nrows=3, ncols=2, sharex=False, figsize=(10, 10))
 
@@ -41,22 +60,22 @@ def main(variant):
     print(f"Number of inh. spikes: {len(stimulus_times_inh)}")
 
     # plot trace comparisons for LIF neurons
-    arbor_data = np.loadtxt(f'arbor_traces_{variant}_lif.dat')
-    brian_data = np.loadtxt(f'brian2_traces_{variant}_lif.dat')
+
     print("---------------------------------\n"
-          "Data for trace comparison loaded.")
+          "Plotting LIF trace comparison.")
 
     # time, membrane voltage, excitatory conductance, inhibitory conductance,
     # weight
     ylabels = ["Membrane potential (mV)", "Excitatory conductance (µS)", "Inhibitory conductance (µS)",
                "Excitatory weight (µS)"]
-    for i in range(1, 5):
+    for i, ylabel in enumerate(ylabels):
+        print(f"Considering {ylabel} (panel {i})")
 
         for spike_time in stimulus_times_exc:
-            axes.flat[i - 1].axvline(spike_time, ymin=0.9, ymax=1, color='blue')
+            axes.flat[i].axvline(spike_time, ymin=0.9, ymax=1, color='blue')
 
         for spike_time in stimulus_times_inh:
-            axes.flat[i - 1].axvline(spike_time, ymin=0.85,
+            axes.flat[i].axvline(spike_time, ymin=0.85,
                                      ymax=0.95, color='red')
 
         # offset for Arbor where we have only access to the plastic
@@ -66,45 +85,39 @@ def main(variant):
         else:
             weight_offset = 0
 
-        axes.flat[i - 1].plot(arbor_data[:, 0], arbor_data[:, i] + weight_offset,
+        axes.flat[i].plot(trace_data_lif_arbor[:, 0], trace_data_lif_arbor[:, i+1] + weight_offset,
                               label='Arbor', marker='None')
-        axes.flat[i - 1].plot(brian_data[:, 0], brian_data[:, i],
-                              label='Brian', linestyle='dashed', marker='None')
-        axes.flat[i - 1].set_xlabel("Time (ms)")
+        axes.flat[i].plot(trace_data_lif_ref[:, 0], trace_data_lif_ref[:, i+1],
+                              label=ref_name, linestyle='dashed', marker='None')
+        axes.flat[i].set_xlabel("Time (ms)")
 
-        axes.flat[i - 1].set_ylabel(ylabels[i - 1])
+        axes.flat[i].set_ylabel(ylabel)
 
         # compute and print R^2 and RMSE
-        print(f"{ylabels[i - 1]}:")
-        compute_and_print_goodness(arbor_data[:, i], brian_data[:, i])
+        print(f"{ylabel}:")
+        compute_and_print_goodness(trace_data_lif_arbor[:, i+1], trace_data_lif_ref[:, i+1])
 
 
     # plot spike comparison for LIF neurons
-    arbor_spikes = np.loadtxt(f'arbor_spikes_{variant}_lif.dat')
-    brian_spikes = np.loadtxt(f'brian2_spikes_{variant}_lif.dat')
-
-    if len(arbor_spikes) == len(brian_spikes):
-        axes.flat[4].plot(arbor_spikes, (arbor_spikes -
-                                         brian_spikes) / brian_spikes * 100)
+    if len(spike_data_lif_arbor) == len(spike_data_lif_ref):
+        axes.flat[4].plot(spike_data_lif_arbor, (spike_data_lif_arbor -
+                                         spike_data_lif_ref) / spike_data_lif_ref * 100)
         axes.flat[4].set_xlabel("Time (ms)")
         axes.flat[4].set_ylabel("Spike time mismatch (%)")
     else:
-        axes.flat[4].text(0.05, 0.5, "Mismatch in number of spikes:\nArbor: {}\nBrian2: {}".format(
-            len(arbor_spikes), len(brian_spikes)))
+        axes.flat[4].text(0.05, 0.5, "Mismatch in number of spikes:\nArbor: {}\n{} {}".format(
+            len(spike_data_lif_arbor), ref_name, len(spike_data_lif_ref)))
         
     #axes.flat[-1].set_axis_off()
         
-    # load data from files
-    arbor_classical_data = np.loadtxt(f'arbor_traces_{variant}_classical.dat')
-    brian_classical_data = np.loadtxt(f'brian2_traces_{variant}_classical.dat')
     print("--------------------------------------\n"
-          "Data for classical STDP curves loaded.")
+          "Plotting classical STDP curves.")
 
     # plot comparison for classical STDP curve
-    axes.flat[5].plot(arbor_classical_data[:, 0], arbor_classical_data[:, 1],
+    axes.flat[5].plot(trace_data_classical_arbor[:, 0], trace_data_classical_arbor[:, 1],
                       label='Arbor', marker='None')
-    axes.flat[5].plot(brian_classical_data[:, 0], brian_classical_data[:, 1],
-                      label='Brian', linestyle='dashed', marker='None')
+    axes.flat[5].plot(trace_data_classical_ref[:, 0], trace_data_classical_ref[:, 1],
+                      label=ref_name, linestyle='dashed', marker='None')
     axes.flat[5].set_xlabel(r'Time delay $\Delta t$ (ms)')
     axes.flat[5].set_ylabel(r'Weight change $\Delta w$ (µS)')
 
@@ -115,7 +128,7 @@ def main(variant):
     fig.savefig(f'comparison_{variant}.svg')
 
     # compute and print R^2 and RMSE
-    compute_and_print_goodness(arbor_classical_data[:, 1], brian_classical_data[:, 1])
+    compute_and_print_goodness(trace_data_classical_arbor[:, 1], trace_data_classical_ref[:, 1])
 
 
 

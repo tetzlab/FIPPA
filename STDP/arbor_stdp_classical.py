@@ -160,7 +160,7 @@ def main(variant):
     """Runs simulation and stores results."""
 
     # set up simulation and run
-    config = json.load(open(f"config_{variant}_classical.json", 'r'))
+    config = json.load(open("config_classical.json"))
     recipe = SingleRecipe(config)
 
     context = arbor.context()

@@ -15,7 +15,7 @@ def main(variant):
     https://brian2.readthedocs.io/en/stable/resources/tutorials/2-intro-to-brian-synapses.html)
     and stores results."""
 
-    config = json.load(open(f"config_{variant}_classical.json"))
+    config = json.load(open("config_classical.json"))
     neuron_config = config["neuron"]
     #start_scope()
 
@@ -67,8 +67,11 @@ def main(variant):
     
     spike_indices = np.vstack((spikemon_1.i, spikemon_2.i)).flatten()
     spike_times = np.vstack((spikemon_1.t / ms, spikemon_2.t / ms)).flatten()
+    spike_data = np.column_stack([spike_times, spike_indices])
+    sorted_indices = np.lexsort((spike_data[:, 1], spike_data[:, 0]))
+    sorted_spike_data = spike_data[sorted_indices]
     np.savetxt(f'brian2_spikes_{variant}_classical.dat', 
-               np.sort(np.column_stack([spike_times, spike_indices]), axis=0),
+               sorted_spike_data,
                fmt="%.4f %.0f") # integer formatting for neuron number
     
 
